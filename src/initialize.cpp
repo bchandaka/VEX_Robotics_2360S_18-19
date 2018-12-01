@@ -1,13 +1,36 @@
 #include "main.h"
+#include "../vars.h"
 
-void on_center_button() {
-	static bool pressed = false;
-	pressed = !pressed;
-	if (pressed) {
-		pros::lcd::set_text(2, "I was pressed!");
-	} else {
-		pros::lcd::clear_line(2);
-	}
+bool autonRunning = true;
+bool autonBlue = false;
+int autonVer = 1;
+
+void displayStatus() {
+    std::string line1 = autonRunning ? "ON" : "OFF";
+    std::string line2 = autonBlue ? "BLUE" : "RED";
+    //std::string line3 = to_string(autonVer);
+
+    pros::lcd::set_text(0, "Auton (left btn): " + line1);
+    pros::lcd::set_text(1, "Side  (mid btn):   " + line2);
+    //pros::lcd::set_text(2, "v1 or v2 (right btn): " + line3);
+
+    pros::lcd::set_text(5, "Press the buttons hard, like you do to me!");
+
+}
+
+void on_btnL() {
+    autonRunning = !autonRunning;
+    displayStatus();
+}
+
+void on_btnM() {
+    autonBlue = !autonBlue;
+    displayStatus();
+}
+
+void on_btnR() {
+    autonVer = 3 - autonVer;
+    displayStatus();
 }
 
 /**
@@ -17,10 +40,12 @@ void on_center_button() {
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Okapilib Tester");
+    pros::lcd::initialize();
+    displayStatus();
 
-	pros::lcd::register_btn1_cb(on_center_button);
+    pros::lcd::register_btn0_cb(on_btnL);
+    pros::lcd::register_btn1_cb(on_btnM);
+    //pros::lcd::register_btn2_cb(on_btnR);
 }
 
 /**

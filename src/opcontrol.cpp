@@ -13,10 +13,11 @@ Motor claw (5, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
 
 //PID constants, currently unused
 
-
+const bool AUTON_TEST = true;
 
 //-----Initialize Controller-----
 Controller master (E_CONTROLLER_MASTER);
+Controller partner (E_CONTROLLER_PARTNER);
 
 void flywheelControl(){
 	if (master.get_digital(E_CONTROLLER_DIGITAL_X)){
@@ -34,10 +35,10 @@ void flywheelControl(){
 }
 
 void intakeControl(){
-	if (master.get_digital(E_CONTROLLER_DIGITAL_L1)){
+	if (partner.get_digital(E_CONTROLLER_DIGITAL_L1)){
 		intake.move_velocity(-150);
 	}
-	else if (master.get_digital(E_CONTROLLER_DIGITAL_L2)){
+	else if (partner.get_digital(E_CONTROLLER_DIGITAL_L2)){
 		intake.move_velocity(150);
 	}
 	else{
@@ -46,10 +47,10 @@ void intakeControl(){
 }
 
 void clawControl(){
-	if (master.get_digital(E_CONTROLLER_DIGITAL_UP)){
+	if (partner.get_digital(E_CONTROLLER_DIGITAL_R1)){
 		claw.move_velocity(100);
 	}
-	else if (master.get_digital(E_CONTROLLER_DIGITAL_DOWN)){
+	else if (partner.get_digital(E_CONTROLLER_DIGITAL_R2)){
 		claw.move_velocity(-100);
   }
     else{
@@ -83,11 +84,15 @@ void opcontrol() {
 
   while (true) {
     drive();
-		flywheelControl();
-		intakeControl();
+    flywheelControl();
+    intakeControl();
     clawControl();
     liftControl();
-    pros::lcd::print(4, "joystick right y %d",master.get_analog(E_CONTROLLER_ANALOG_RIGHT_Y));
+    pros::lcd::print(7, "joystick right y %d",master.get_analog(E_CONTROLLER_ANALOG_RIGHT_Y));
+
+    if (AUTON_TEST && master.get_digital_new_press(E_CONTROLLER_DIGITAL_DOWN)) {
+        autonomous();
+    }
 
     // Wait and give up the time we don't need to other tasks.
     // Additionally, joystick values, motor telemetry, etc. all updates every 10 ms.
