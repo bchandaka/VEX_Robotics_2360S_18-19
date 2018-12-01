@@ -15,8 +15,6 @@ Motor claw (5, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
 
 
 
-
-
 //-----Initialize Controller-----
 Controller master (E_CONTROLLER_MASTER);
 
@@ -75,7 +73,7 @@ void liftControl(){
 }
 
 void drive(){
-  driveRight.move(master.get_analog(E_CONTROLLER_ANALOG_RIGHT_Y) );
+  driveRight.move(master.get_analog(E_CONTROLLER_ANALOG_RIGHT_Y));
   driveLeft.move(master.get_analog(E_CONTROLLER_ANALOG_LEFT_Y));
 }
 
