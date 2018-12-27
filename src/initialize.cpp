@@ -1,9 +1,11 @@
 #include "main.h"
 #include "../vars.h"
+using namespace pros;
 
 bool autonRunning = true;
 bool autonBlue = false;
 int autonVer = 2;
+
 
 void displayStatus() {
     std::string line1 = autonRunning ? "ON" : "OFF";
@@ -32,7 +34,6 @@ void on_btnR() {
     autonVer = 3 - autonVer;
     displayStatus();
 }
-
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *

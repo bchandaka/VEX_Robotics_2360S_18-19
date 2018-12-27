@@ -17,6 +17,7 @@ using namespace okapi;
  */
  //Robot Dimension constants
  //pros::Motor claw (5, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
+#include "autonDriveFunctions.hpp"
 const int DRIVE_LEFT_MOTOR_PORT = 1;
 const int DRIVE_RIGHT_MOTOR_PORT = -10;
 const auto WHEEL_DIAMETER = 4.0_in;
@@ -29,6 +30,7 @@ AbstractMotor::gearset::red,
 );
 
 void autonomous() {
+/*
     int mult = autonBlue ? -1 : 1;
     if (!autonRunning)
         return;
@@ -41,29 +43,27 @@ void autonomous() {
 
         driveController.moveDistance(-57_in);
 
-        pros::Motor driveLeft (1, pros::E_MOTOR_GEARSET_36, false, pros::E_MOTOR_ENCODER_DEGREES);
-        pros::Motor driveRight (10, pros::E_MOTOR_GEARSET_36, true, pros::E_MOTOR_ENCODER_DEGREES);
 
       //  driveController.turnAngle(mult * 180);
 
 
         if (autonBlue) {
             //driveLeft.move_relative(-20, 200);
-            driveLeft.move(-127);
+            driveLeft1.move(-127);
         } else {
-            driveRight.move(-127);
+            driveRight1.move(-127);
         }
 
         pros::delay(2000);
 
-        driveLeft.move(127);
-        driveRight.move(127);
+        driveLeft1.move(127);
+        driveRight1.move(127);
 
         pros::delay(4000);
 
         driveLeft.move(0);
         driveRight.move(0);
-          /*
+
         pros::Motor flywheelLeft (14, pros::E_MOTOR_GEARSET_06, false, pros::E_MOTOR_ENCODER_DEGREES);
         pros::Motor flywheelRight (15, pros::E_MOTOR_GEARSET_06, true, pros::E_MOTOR_ENCODER_DEGREES);
         pros::Motor intake (6, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
@@ -81,6 +81,8 @@ void autonomous() {
         flywheelRight.moveVelocity(0);
         intake.moveVelocity(0);
 
-        driveController.moveDistance(-10_in); // Move 35 motor inches forward*/
+        driveController.moveDistance(-10_in); // Move 35 motor inches forward
+
     }
+*/
 }
