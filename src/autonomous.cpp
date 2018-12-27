@@ -17,7 +17,6 @@ using namespace okapi;
  */
  //Robot Dimension constants
  //pros::Motor claw (5, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
-#include "autonDriveFunctions.hpp"
 const int DRIVE_LEFT_MOTOR_PORT = 1;
 const int DRIVE_RIGHT_MOTOR_PORT = -10;
 const auto WHEEL_DIAMETER = 4.0_in;

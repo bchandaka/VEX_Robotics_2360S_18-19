@@ -1,14 +1,15 @@
 #include "main.h"
 #include <algorithm>
+#include <math.h>
 using namespace pros;
 
 #include "../vars.h"
 
 
 const bool AUTON_TEST = true;
-
 //---------------------Initialize Ports-------------------
 pros::ADIGyro gyro (2);
+
 Motor driveLeft1 (1, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_COUNTS);
 Motor driveLeft2 (2, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_COUNTS);
 Motor driveRight1 (10, E_MOTOR_GEARSET_18, true,E_MOTOR_ENCODER_COUNTS);
@@ -19,6 +20,8 @@ Motor indexer (2, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_COUNTS);
 Motor intake (6, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_COUNTS);
 
 Motor descorer (5, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_COUNTS);
+
+
 
 //---------------------Slew Rate Task--------------------
 #define MOTOR_NUM               8
@@ -58,9 +61,6 @@ void MotorSlewRateTask(void* params){
         for(motorIndex=0; motorIndex<MOTOR_NUM; motorIndex++){
             // So we don't keep accessing the internal storage
             Motor motorTmp =  motorObj[ motorIndex ];
-						if(motorIndex==6){
-							printf("motorVolts: %d", motorVolt[6]);
-						}
             // Current motor value
             int currentTmp = motorVolt[motorIndex];
             // Update motor value
@@ -191,7 +191,16 @@ void debugMotor(int lcdLine, pros:: Motor motor, std::string motorName, int moto
 void gyroReset(){
 	gyro.reset();
 }
-
+void drive_straight(float dist) // distance in inches
+{
+	int desiredDriveTicks = (dist/(4* M_PI))*900 + driveLeft1.get_position();
+	while (abs(desiredDriveTicks + driveLeft1.get_position()) > 12) {
+		runDriveLeft(80* atan(0.009 * (desiredDriveTicks - driveLeft1.get_position())));
+		runDriveRight(80* atan(0.009 * (desiredDriveTicks + driveLeft1.get_position())));
+	}
+	runDriveLeft(0);
+	runDriveRight(0);
+}
 void turnDegrees(float angle){
   gyroReset();
 	bool rightTurn = angle > 0;
