@@ -1,7 +1,7 @@
 {
     "py/object": "pros.conductor.project.Project",
     "py/state": {
-        "project_name": "pros-test",
+        "project_name": "VEX_2360S_18-19",
         "target": "v5",
         "templates": {
             "kernel": {

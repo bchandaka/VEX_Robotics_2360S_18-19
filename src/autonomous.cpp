@@ -1,10 +1,11 @@
+/*
 #include "main.h"
 #include "okapi/api.hpp"
 
 #include "../vars.h"
 
 using namespace okapi;
-/**
+
  * Runs the user autonomous code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
  * the Field Management System or the VEX Competition Switch in the autonomous
@@ -14,7 +15,7 @@ using namespace okapi;
  * If the robot is disabled or communications is lost, the autonomous task
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
- */
+
  //Robot Dimension constants
  //pros::Motor claw (5, pros::E_MOTOR_GEARSET_18, false, pros::E_MOTOR_ENCODER_DEGREES);
 const int DRIVE_LEFT_MOTOR_PORT = 1;
@@ -29,7 +30,7 @@ AbstractMotor::gearset::red,
 );
 
 void autonomous() {
-/*
+
     int mult = autonBlue ? -1 : 1;
     if (!autonRunning)
         return;
@@ -83,5 +84,6 @@ void autonomous() {
         driveController.moveDistance(-10_in); // Move 35 motor inches forward
 
     }
-*/
+
 }
+*/

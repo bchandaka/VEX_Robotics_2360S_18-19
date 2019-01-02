@@ -7,21 +7,20 @@ using namespace pros;
 
 
 const bool AUTON_TEST = true;
-//---------------------Initialize Ports-------------------
-pros::ADIGyro gyro (2);
 
-Motor driveLeft1 (1, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_COUNTS);
+
+//---------------------Initialize Ports-------------------
+
+Motor driveLeft1 (1,  E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_COUNTS);
 Motor driveLeft2 (2, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_COUNTS);
 Motor driveRight1 (10, E_MOTOR_GEARSET_18, true,E_MOTOR_ENCODER_COUNTS);
 Motor driveRight2 (9, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_COUNTS);
 
-Motor flywheel (14, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_COUNTS);
-Motor indexer (2, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_COUNTS);
-Motor intake (6, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_COUNTS);
+Motor flywheel (7, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_COUNTS);
+Motor indexer (6, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_COUNTS);
+Motor intake (5, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_COUNTS);
 
-Motor descorer (5, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_COUNTS);
-
-
+Motor descorer (4, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_COUNTS);
 
 //---------------------Slew Rate Task--------------------
 #define MOTOR_NUM               8
@@ -54,7 +53,7 @@ void MotorSlewRateTask(void* params){
 			motorVolt[motorIndex] = 0;
 		}
 		motorSlew[6] = MOTOR_FAST_SLEW_RATE;
-
+    motorSlew[4] = MOTOR_FAST_SLEW_RATE;
     // run task until stopped
     while( true ){
         // run loop for every motor
@@ -65,7 +64,7 @@ void MotorSlewRateTask(void* params){
             int currentTmp = motorVolt[motorIndex];
             // Update motor value
 						if(currentTmp != motorReq[motorIndex]){
-							motorVolt[motorIndex] += sign(motorReq[motorIndex]-currentTmp) *
+							currentTmp += sign(motorReq[motorIndex]-currentTmp) *
 													std::clamp(motorSlew[motorIndex], 0, abs(currentTmp-motorReq[motorIndex]));
             }
 						motorVolt[motorIndex] = std::clamp(currentTmp, MOTOR_MIN_VALUE, MOTOR_MAX_VALUE);
@@ -81,8 +80,8 @@ void MotorSlewRateTask(void* params){
 
 //------------------Motor Functions------------------
 void runDriveLeft(int volts){
-  motorReq[0] = -volts;
-  motorReq[1] = volts;
+  motorReq[0] = volts;
+  motorReq[1] = -volts;
 }
 
 void runDriveRight(int volts){
@@ -107,7 +106,7 @@ void runDescorer(int volts){
 Controller master (E_CONTROLLER_MASTER);
 Controller partner (E_CONTROLLER_PARTNER);
 
-//------------Map COntroller Input to Motors---------
+//------------Map Controller Input to Motors---------
 int flywheelCtl;
 int indexerCtl;
 int intakeCtl;
@@ -116,12 +115,13 @@ void flywheelControl(){
 	flywheelCtl = (master.get_digital(E_CONTROLLER_DIGITAL_X)) +
 								(master.get_digital(E_CONTROLLER_DIGITAL_A) << 1) +
 								(master.get_digital(E_CONTROLLER_DIGITAL_B) << 2);
+
 	switch(flywheelCtl){
 		case 1: //BtnX
-			runFlywheel(127);
+      runFlywheel(127);
 			break;
 		case 2: //BtnA
-			runFlywheel(90);
+      runFlywheel(90);
 			break;
 		case 4: //BtnB
 			runFlywheel(0);
@@ -130,8 +130,8 @@ void flywheelControl(){
 }
 
 void intakeControl(){
-	intakeCtl = (master.get_digital(E_CONTROLLER_DIGITAL_L1)) +
-								(master.get_digital(E_CONTROLLER_DIGITAL_L2) << 1);
+	intakeCtl = (master.get_digital(E_CONTROLLER_DIGITAL_R1)) +
+							(master.get_digital(E_CONTROLLER_DIGITAL_R2) << 1);
 
 	switch(intakeCtl){
 		case 1: //BtnL1
@@ -146,8 +146,9 @@ void intakeControl(){
 }
 
 void indexerControl(){
-	indexerCtl = (master.get_digital(E_CONTROLLER_DIGITAL_R1)) +
-								(master.get_digital(E_CONTROLLER_DIGITAL_R2) << 1);
+	indexerCtl = (master.get_digital(E_CONTROLLER_DIGITAL_L1)) +
+							 (master.get_digital(E_CONTROLLER_DIGITAL_L2) << 1);
+
 	switch(indexerCtl){
 		case 1: //BtnR1
 			runIndexer(100);
@@ -163,7 +164,7 @@ void indexerControl(){
 
 //-----------------Tank Drive Task--------------
 #define JOY_THRESHOLD	15
-#define kP_tank       1
+#define kP_tank       1.5
 void drive(void* params){
 	int    ctl_l;
 	int    ctl_r;
@@ -185,24 +186,70 @@ void drive(void* params){
 }
 //Debugging function, prints to lcd
 void debugMotor(int lcdLine, pros:: Motor motor, std::string motorName, int motorIndex){
-  lcd::print(lcdLine,"%s Power: %d, volt:%f", motorVolt[motorIndex], motor.get_voltage());
+  lcd::print(lcdLine,"%s Pwr: %d, Pos:%f", motorName, motorVolt[motorIndex], motor.get_position());
+}
+
+pros::ADIGyro gyro (2);
+void opcontrol() {
+  //Start Tasks
+	Task slewRateTask (MotorSlewRateTask, (void*)"PROS", TASK_PRIORITY_DEFAULT,
+               TASK_STACK_DEPTH_DEFAULT, "slewRate");
+	Task tankDriveTask (drive, (void*)"PROS", TASK_PRIORITY_DEFAULT,
+						                TASK_STACK_DEPTH_DEFAULT, "tankDrive");
+  //register left lcd button to reset gyro
+  while (true) {
+    flywheelControl();
+    intakeControl();
+    indexerControl();
+
+		debugMotor(0, driveLeft1, "driveLeft1", 0);
+		debugMotor(1, driveLeft2, "driveLeft2", 1);
+		debugMotor(2, driveRight1, "driveRight1", 2);
+		debugMotor(3, driveRight2, "driveRight2", 3);
+		debugMotor(4, flywheel, "flywheel", 4);
+		debugMotor(5, indexer, "indexer",5);
+		debugMotor(6, intake, "intake", 6);
+		//debugMotor(7, descorer, "descorer", 7);
+		lcd::print(7, "Gyro Value: %f", gyro.get_value());
+
+		//lcd::print(5, "Gyro Value: %f", gyro.get_value());
+
+    //Testing auton
+    if (AUTON_TEST && master.get_digital_new_press(E_CONTROLLER_DIGITAL_DOWN)) {
+      	autonomous();
+    }
+
+    // Wait and give up the time we don't need to other tasks.
+    // Additionally, joystick values, motor telemetry, etc. all updates every 10 ms.
+    delay(MOTOR_TASK_DELAY);
+  }
 }
 //-----------------Auton Drive FUnctions----------------
-void gyroReset(){
-	gyro.reset();
-}
-void drive_straight(float dist) // distance in inches
+
+void driveStraight(double dist) // distance in inches
 {
-	int desiredDriveTicks = (dist/(4* M_PI))*900 + driveLeft1.get_position();
-	while (abs(desiredDriveTicks + driveLeft1.get_position()) > 12) {
-		runDriveLeft(80* atan(0.009 * (desiredDriveTicks - driveLeft1.get_position())));
-		runDriveRight(80* atan(0.009 * (desiredDriveTicks + driveLeft1.get_position())));
+	gyro.reset();
+	int gyroError = 0-gyro.get_value();
+	double gyroK = 0.1;
+	double currentPos = (driveLeft1.get_position() + driveRight1.get_position())/2.0;
+	double desiredDriveTicks = (dist/(4* M_PI))*900 + currentPos;
+	while (abs(desiredDriveTicks - currentPos) > 12) {
+		debugMotor(0, driveLeft1, "driveLeft1", 0);
+		debugMotor(1, driveLeft2, "driveLeft2", 1);
+		debugMotor(2, driveRight1, "driveRight1", 2);
+		debugMotor(3, driveRight2, "driveRight2", 3);
+		runDriveLeft(80* atan(0.009 * (desiredDriveTicks - currentPos)) - (gyroError *gyroK));
+		runDriveRight(79* atan(0.009 * (desiredDriveTicks - currentPos)) + (gyroError*gyroK));
+		currentPos = (driveLeft1.get_position() + driveRight1.get_position())/2.0;
+		gyroError = 0-gyro.get_value();
+		delay(MOTOR_TASK_DELAY);
 	}
 	runDriveLeft(0);
 	runDriveRight(0);
 }
-void turnDegrees(float angle){
-  gyroReset();
+
+void turnAngle(float angle){
+  gyro.reset();
 	bool rightTurn = angle > 0;
 
 	float previous = gyro.get_value() / 10.0;
@@ -210,7 +257,7 @@ void turnDegrees(float angle){
 	float sum = 0;
 	float angleDifference = angle;
 
-	const float speed = 100;
+	const int speed = 100;
 	float leftSpeed = rightTurn ? speed : -speed;
 	float rightSpeed = -leftSpeed;
 
@@ -224,45 +271,15 @@ void turnDegrees(float angle){
 		sum += current - previous;
 
 		angleDifference = fabs(angle) - fabs(sum);
-
-		runDriveLeft( leftSpeed * atan(K * fabs(angleDifference) ));
-		runDriveRight( rightSpeed * atan(K * fabs(angleDifference) ));
+		//std::clamp((int)(rightSpeed * atan(K * fabs(angleDifference))), 20,speed)
+		runDriveLeft( leftSpeed * atan(K * fabs(angleDifference)));
+		runDriveRight( rightSpeed * atan(K * fabs(angleDifference)));
+		delay(MOTOR_TASK_DELAY);
 	}
 	runDriveLeft(0);
 	runDriveRight(0);
 }
 
-void opcontrol() {
-  //Start Tasks
-	pros::Task slewRateTask (MotorSlewRateTask, (void*)"PROS", TASK_PRIORITY_DEFAULT,
-               TASK_STACK_DEPTH_DEFAULT, "slewRate");
-	pros::Task tankDriveTask (drive, (void*)"PROS", TASK_PRIORITY_DEFAULT,
-						                TASK_STACK_DEPTH_DEFAULT, "tankDrive");
-  //register left lcd button to reset gyro
-	pros::lcd::register_btn0_cb(gyroReset);
-  while (true) {
-    flywheelControl();
-    intakeControl();
-    indexerControl();
-		debugMotor(0, driveLeft1, "driveLeft1", 0);
-		debugMotor(1, driveLeft2, "driveLeft2", 1);
-		debugMotor(2, driveRight1, "driveRight1", 2);
-		debugMotor(3, driveRight2, "driveRight2", 3);
-		debugMotor(4, flywheel, "flywheel", 4);
-		debugMotor(5, indexer, "indexer",5);
-		debugMotor(6, intake, "intake", 6);
-		debugMotor(7, descorer, "descorer", 7);
-		//lcd::print(5, "Gyro Value: %f", gyro.get_value());
-
-    //Testing auton
-    if (AUTON_TEST && master.get_digital_new_press(E_CONTROLLER_DIGITAL_DOWN)) {
-        turnDegrees(90);
-        delay(1000);
-        turnDegrees(-90);
-    }
-
-    // Wait and give up the time we don't need to other tasks.
-    // Additionally, joystick values, motor telemetry, etc. all updates every 10 ms.
-    delay(10);
-  }
+void autonomous(){
+	driveStraight(10.0);
 }
