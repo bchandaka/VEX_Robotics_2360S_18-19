@@ -1,6 +1,6 @@
 #include "../vars.h"
 
-void auton1(){
+void auton2(){
   int start = millis();
   motorSlew[4] = 127;
   motorSlew[5] = 127;
@@ -31,27 +31,13 @@ void auton1(){
   turnAngle(-3);
   driveStraight(38);
   printf("back out of flag and come back\n");
-  driveStraight(-38);
-  turnAngle(3);
-  printf("coming back to platform\n");
-  driveStraight(-32);
-  printf("face platform\n");
-  turnAngle(90);
-  printf("get on the platform\n");
-  driveStraight(38);
+  driveStraight(-28);
+  runIntake(120);
+  printf("turn towards the cap\n");
+  turnAngle(93);
+  printf("drive the cap\n");
+  driveStraight(20);
   printf("%d\n",millis()-start);
-  /*runIntake(-127);
-  driveStraight(18.0);
-  runIntake(0);
-  printf("Shoot the Middle Flag\n");
-  runIndexer(127);
-  delay(700);
-  runIndexer(0);
-  runFlywheel(0);
-  driveStraight(10.0);
-  turnAngle(-10);
-  printf("Ram the low Flag\n");
-  driveStraight(7.0);*/
   printf("autonDone\n");
   motorSlew[4] = 15;
   motorSlew[6] = 15;

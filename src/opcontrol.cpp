@@ -12,6 +12,7 @@ void debugMotor(int lcdLine, pros:: Motor motor, std::string motorName, int moto
 
 
 void opcontrol() {
+
   printf("start%d \n", 1);
   //Start Tasks
 	Task slewRateTask (MotorSlewRateTask, (void*)"PROS", TASK_PRIORITY_DEFAULT,
@@ -19,7 +20,7 @@ void opcontrol() {
 	Task tankDriveTask (tankDrive, (void*)"PROS", TASK_PRIORITY_DEFAULT,
 						                TASK_STACK_DEPTH_DEFAULT, "tankDrive");
   //register left lcd button to reset gyro
-  while (true) {
+  while (true) { //Controls that will run during driver control
     flywheelControl();
     intakeControl();
     indexerControl();
@@ -40,7 +41,10 @@ void opcontrol() {
     //Testing auton
 
     if (AUTON_TEST && master.get_digital_new_press(E_CONTROLLER_DIGITAL_DOWN)) {
-      auton1();
+      tankDriveTask.suspend();
+      slewRateTask.remove();
+      autonomous();
+      tankDriveTask.resume();
     }
 
     // Wait and give up the time we don't need to other tasks.

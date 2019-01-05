@@ -12,24 +12,18 @@
 //Array to hold motor objects
 Motor motorObj[ MOTOR_NUM ] = {driveLeft1, driveLeft2, driveRight1, driveRight2, flywheel, indexer, intake, descorer};
 // Array to hold requested speed for the motors
-int motorReq[ MOTOR_NUM ];
+int motorReq[ MOTOR_NUM ] = {0,0,0,0,0,0,0,0};
 
 // Array to hold "slew rate" for the motors
-int motorSlew[ MOTOR_NUM ];
+int motorSlew[ MOTOR_NUM ] = {15, 15, 15, 15, 15, 15, 15, 15};
 // Array to hold current motor speed
-int motorVolt[ MOTOR_NUM ];
+int motorVolt[ MOTOR_NUM ] = {0,0,0,0,0,0,0,0};
 
 int sign(int x) {
     return (x > 0) - (x < 0);
 }
 void MotorSlewRateTask(void* params){
     int motorIndex;
-    // Initialize stuff
-		for(motorIndex=0;motorIndex<MOTOR_NUM;motorIndex++){
-			motorReq[motorIndex] = 0;
-			motorSlew[motorIndex] = MOTOR_DEFAULT_SLEW_RATE;
-			motorVolt[motorIndex] = 0;
-		}
 		motorSlew[6] = MOTOR_FAST_SLEW_RATE;
     motorSlew[4] = MOTOR_FAST_SLEW_RATE;
     // run task until stopped

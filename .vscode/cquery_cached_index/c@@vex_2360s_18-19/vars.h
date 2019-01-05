@@ -65,3 +65,4 @@ extern void driveStraight(double dist);
 extern void turnAngle(float angle);
 
 extern void auton1();
+extern void auton2();

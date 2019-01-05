@@ -11,7 +11,7 @@ void tankDrive(void* params){
 		// Get tank drive vertical joystick control
 		ctl_l = master.get_analog(E_CONTROLLER_ANALOG_LEFT_Y)/tankKp;
 		ctl_r = master.get_analog(E_CONTROLLER_ANALOG_RIGHT_Y)/tankKp;
-		// Ignore joystick near center to prevent motors from running when the joystick doesn't properly center to zero
+		// Ignore joystick near center to prevent powering motors when the joystick doesn't properly center to zero
 		drive_l = (abs(ctl_l) <= JOY_THRESHOLD) ? 0:ctl_l;
 		drive_r = (abs(ctl_r) <= JOY_THRESHOLD) ? 0:ctl_r;
     //Send it!

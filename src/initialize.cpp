@@ -14,6 +14,7 @@ void initialize() {
     pros::lcd::register_btn0_cb(on_btnL);
     pros::lcd::register_btn1_cb(on_btnM);
     pros::lcd::register_btn2_cb(on_btnR);
+    
 }
 
 /**

@@ -15,7 +15,7 @@ void driveStraight(double dist) // distance in inches
 		debugMotor(1, driveLeft2, "driveLeft2", 1);
 		debugMotor(2, driveRight1, "driveRight1", 2);
 		debugMotor(3, driveRight2, "driveRight2", 3);
-		speed = 70* atan(0.0015 * (desiredDriveTicks - currentPos));
+		speed = 80* atan(0.0015 * (desiredDriveTicks - currentPos)); //Decreases power gradually when the current position approaches the desired position
 		baseSpeed = 10*((speed > 0) - (speed < 0));
 		runDriveLeft(speed + baseSpeed); //- (gyroError *gyroKp));
 		runDriveRight(speed + baseSpeed); //+ (gyroError*gyroKp));
