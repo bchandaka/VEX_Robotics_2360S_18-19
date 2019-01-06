@@ -15,12 +15,15 @@
 void autonomous() {
   Task slewRateTask (MotorSlewRateTask, (void*)"PROS", TASK_PRIORITY_DEFAULT,
                TASK_STACK_DEPTH_DEFAULT, "slewRate");
-  switch(autonVer){
-    case 1:
-      auton1();
-      break;
-    case 2:
-      auton2();
-      break;
+    switch(autonVer){
+      case 1:
+        auton1();
+        break;
+      case 2:
+        auton2();
+        break;
+      case 3:
+        skillsAuton();
+        break;
   }
 }

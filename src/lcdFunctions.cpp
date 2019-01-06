@@ -9,13 +9,13 @@ const char LEFT_ARROW = 200;
 	#define NUM_AUTON_OPTIONS 6
 #endif
 
-bool skillsAuton = false;
-bool autonBlue = false;
-int autonVer = 1;
+bool isSkills = false;
+bool autonBlue = true;
+int autonVer = 3;
 
 
 void displayStatus() {
-    std::string line1 = skillsAuton ? "TRUE" : "FALSE";
+    std::string line1 = isSkills ? "TRUE" : "FALSE";
     std::string line2 = autonBlue ? "BLUE" : "RED";
     std::string line3 = std::to_string(autonVer);
 
@@ -25,7 +25,7 @@ void displayStatus() {
 }
 
 void on_btnL() {
-    skillsAuton = !skillsAuton;
+    isSkills = !isSkills;
     displayStatus();
 }
 

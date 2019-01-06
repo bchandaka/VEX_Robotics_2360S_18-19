@@ -1,5 +1,8 @@
 #include "main.h"
 
+//Declares all variables/functions used in the entire project so all variables/functions can be accessed from any file
+
+extern bool isSkills;
 extern bool autonRunning;
 extern bool autonBlue;
 extern int autonVer;
@@ -66,3 +69,4 @@ extern void turnAngle(float angle);
 
 extern void auton1();
 extern void auton2();
+extern void skillsAuton();

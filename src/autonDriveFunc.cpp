@@ -39,7 +39,7 @@ void turnAngle(float angle){
 	const int speed = 85;
 	int baseLeftSpeed = 15;
 	int baseRightSpeed = 15;
-	float leftSpeed = autonBlue ? (rightTurn ? speed : -speed):(rightTurn ? speed : -speed);
+	float leftSpeed = autonBlue ? (rightTurn ? -speed : speed):(rightTurn ? speed : -speed);
 	float rightSpeed = -leftSpeed;
 
 	const float K = 0.018;

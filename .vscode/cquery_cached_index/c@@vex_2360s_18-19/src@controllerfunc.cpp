@@ -82,11 +82,11 @@ void tankSpeedControl(){
 
 	switch(tankSpeedCtl){
 		case 1: //BtnUP-Partner
-      tankKp = 1.1;
+      tankKp = 1;
 			master.rumble(("."));
 			break;
 		case 2: //BtnLEFT-Partner
-      tankKp = 1.5;
+      tankKp = 1.4;
 			break;
 		case 4: //BtnDOWN-Partner
 			tankKp = 2.0;

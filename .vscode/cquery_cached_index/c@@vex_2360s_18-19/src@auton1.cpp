@@ -10,7 +10,7 @@ void auton1(){
   printf("%d\n", motorReq[6]);
   printf("moving backward\n");
   runFlywheel(127);
-  driveStraight(-33.0);
+  driveStraight(-34.0);
   //face the flags
   turnAngle(-90);
   driveStraight(10.0);
@@ -19,41 +19,32 @@ void auton1(){
   delay(300);
   runIndexer(0); //Starting here
   printf("Lower FlyWheel Speed\n");
-  runFlywheel(90);
+  runFlywheel(93);
   delay(900);
   printf("Shoot the middle flag\n");
   runIndexer(127);
-  delay(500);
-  runIndexer(0);
   runFlywheel(0);
 
   printf("Ram the bottom flag\n");
-  turnAngle(-3);
-  driveStraight(38);
+  driveStraight(25);
+  turnAngle(-10);
+  driveStraight(10);
   printf("back out of flag and come back\n");
-  driveStraight(-38);
-  turnAngle(3);
+  driveStraight(-10);
+  turnAngle(10);
+
+
   printf("coming back to platform\n");
-  driveStraight(-32);
+    driveStraight(-56);
   printf("face platform\n");
   turnAngle(90);
-  printf("get on the platform\n");
-  driveStraight(38);
+  printf("get on the yellow platform\n");
+  driveStraight(50);
   printf("%d\n",millis()-start);
-  /*runIntake(-127);
-  driveStraight(18.0);
   runIntake(0);
-  printf("Shoot the Middle Flag\n");
-  runIndexer(127);
-  delay(700);
   runIndexer(0);
-  runFlywheel(0);
-  driveStraight(10.0);
-  turnAngle(-10);
-  printf("Ram the low Flag\n");
-  driveStraight(7.0);*/
   printf("autonDone\n");
-  motorSlew[4] = 15;
-  motorSlew[6] = 15;
+  motorSlew[4] = 30;
+  motorSlew[6] = 30;
 
 }
