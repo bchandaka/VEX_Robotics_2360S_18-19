@@ -8,6 +8,8 @@ Controller partner (E_CONTROLLER_PARTNER);
 int flywheelCtl; //Variable to control flywheel switch statement
 int indexerCtl; //Variable to control indexer switch statement
 int intakeCtl; //Variable to control intake switch statement
+int descorerCtl; //Variable to control descorer switch statement
+
 int tankSpeedCtl; //Variable to control tank switch statement
 void flywheelControl(){
 	flywheelCtl = (partner.get_digital(E_CONTROLLER_DIGITAL_X)) +
@@ -75,21 +77,38 @@ void indexerControl(){
 	}
 }
 
+void descorerControl(){
+	descorerCtl = (partner.get_digital(E_CONTROLLER_DIGITAL_L1)) +
+							 (partner.get_digital(E_CONTROLLER_DIGITAL_L2) << 1);
+
+	switch(descorerCtl){
+		case 1: //BtnL1
+			runDescorer(-127);
+			break;
+		case 2: //BtnL2
+			runDescorer(127);
+			break;
+		default:
+			runDescorer(0);
+	}
+}
+
 void tankSpeedControl(){
   tankSpeedCtl = (partner.get_digital(E_CONTROLLER_DIGITAL_UP)) +
 								(partner.get_digital(E_CONTROLLER_DIGITAL_LEFT) << 1) +
-								(partner.get_digital(E_CONTROLLER_DIGITAL_DOWN) << 2);
+								(partner.get_digital(E_CONTROLLER_DIGITAL_UP) << 2);
 
 	switch(tankSpeedCtl){
 		case 1: //BtnUP-Partner
       tankKp = 1;
-			master.rumble(("."));
+			master.rumble((".."));
 			break;
 		case 2: //BtnLEFT-Partner
-      tankKp = 1.4;
+      tankKp = 1.2;
+			master.rumble(("."));
 			break;
 		case 4: //BtnDOWN-Partner
-			tankKp = 2.0;
+			tankKp = 1.7;
 			master.rumble(("-"));
 			break;
 	}

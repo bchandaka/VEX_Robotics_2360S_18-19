@@ -52,6 +52,7 @@ extern int intakeCtl;
 extern void flywheelControl();
 extern void indexerControl();
 extern void intakeControl();
+extern void descorerControl();
 
 extern int JOY_THRESHOLD;
 extern double tankKp;
@@ -67,6 +68,13 @@ extern ADIGyro gyro;
 extern void driveStraight(double dist);
 extern void turnAngle(float angle);
 
-extern void auton1();
-extern void auton2();
+extern void nearSidePlat();
+extern void nearSide();
+extern void farSide();
+extern void farSidePlat();
 extern void skillsAuton();
+extern void getBall();
+extern void shootHighFlags();
+extern void shootLowFlag();
+extern void nearPlatform();
+extern void farPlatform();

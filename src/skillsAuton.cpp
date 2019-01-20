@@ -1,6 +1,7 @@
 #include "../vars.h"
 
 void skillsAuton(){
+  delay(1000);
   int start = millis();
   motorSlew[4] = 127;
   motorSlew[5] = 127;
@@ -26,16 +27,16 @@ void skillsAuton(){
   runFlywheel(0);
 
   printf("Ram the bottom flag\n");
-  driveStraight(24);
-  turnAngle(-10);
+  driveStraight(25);
+  turnAngle(-7);
   driveStraight(10);
   printf("back out of flag and come back\n");
   driveStraight(-10);
-  turnAngle(10);
+  turnAngle(7);
 
 
   printf("coming back to platform\n");
-    driveStraight(-56);
+    driveStraight(-53.5);
   printf("face platform\n");
   turnAngle(90);
   printf("get on the yellow platform\n");
@@ -46,5 +47,4 @@ void skillsAuton(){
   printf("autonDone\n");
   motorSlew[4] = 30;
   motorSlew[6] = 30;
-
 }

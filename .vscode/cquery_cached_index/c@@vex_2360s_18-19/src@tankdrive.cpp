@@ -1,7 +1,7 @@
 #include "../vars.h"
 //-----------------Tank Drive Task--------------
 #define JOY_THRESHOLD	15
-double tankKp = 1.4;
+double tankKp = 1.2;
 void tankDrive(void* params){
 	int    ctl_l;
 	int    ctl_r;

@@ -12,6 +12,7 @@ void debugMotor(int lcdLine, pros:: Motor motor, std::string motorName, int moto
 
 
 void opcontrol() {
+  descorer.set_brake_mode(E_MOTOR_BRAKE_HOLD);
 
   printf("start%d \n", 1);
   //Start Tasks
@@ -24,6 +25,7 @@ void opcontrol() {
     flywheelControl();
     intakeControl();
     indexerControl();
+    descorerControl();
     tankSpeedControl();
     /*
 		debugMotor(0, driveLeft1, "driveLeft1", 0);
@@ -40,12 +42,14 @@ void opcontrol() {
 
     //Testing auton
 
-    if (AUTON_TEST && master.get_digital_new_press(E_CONTROLLER_DIGITAL_DOWN)) {
+    if (AUTON_TEST && master.get_digital_new_press(E_CONTROLLER_DIGITAL_Y)) {
       tankDriveTask.suspend();
-      slewRateTask.remove();
+      slewRateTask.suspend();
       autonomous();
       tankDriveTask.resume();
+      slewRateTask.resume();
     }
+
 
     // Wait and give up the time we don't need to other tasks.
     // Additionally, joystick values, motor telemetry, etc. all updates every 10 ms.

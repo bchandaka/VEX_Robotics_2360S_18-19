@@ -15,15 +15,20 @@
 void autonomous() {
   Task slewRateTask (MotorSlewRateTask, (void*)"PROS", TASK_PRIORITY_DEFAULT,
                TASK_STACK_DEPTH_DEFAULT, "slewRate");
+  descorer.set_brake_mode(E_MOTOR_BRAKE_HOLD);
+
     switch(autonVer){
       case 1:
-        auton1();
+        nearSidePlat();
         break;
       case 2:
-        auton2();
+        nearSide();
         break;
       case 3:
-        skillsAuton();
+        farSidePlat();
+        break;
+      case 4:
+        farSide();
         break;
   }
 }
