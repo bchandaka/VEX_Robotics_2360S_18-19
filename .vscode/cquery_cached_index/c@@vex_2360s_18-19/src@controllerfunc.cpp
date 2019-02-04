@@ -1,4 +1,4 @@
-#include "../vars.h"
+#include "vars.h"
 //-----I---------Initialize Controller---------------
 Controller master (E_CONTROLLER_MASTER);
 Controller partner (E_CONTROLLER_PARTNER);
@@ -8,7 +8,7 @@ Controller partner (E_CONTROLLER_PARTNER);
 int flywheelCtl; //Variable to control flywheel switch statement
 int indexerCtl; //Variable to control indexer switch statement
 int intakeCtl; //Variable to control intake switch statement
-int descorerCtl; //Variable to control descorer switch statement
+int liftCtl; //Variable to control lift switch statement
 
 int tankSpeedCtl; //Variable to control tank switch statement
 void flywheelControl(){
@@ -77,26 +77,57 @@ void indexerControl(){
 	}
 }
 
-void descorerControl(){
-	descorerCtl = (partner.get_digital(E_CONTROLLER_DIGITAL_L1)) +
-							 (partner.get_digital(E_CONTROLLER_DIGITAL_L2) << 1);
+const int NUM_HEIGHTS = 3;
+const int height1 = 0;
+const int height2 = -1800;
+const int height3 = -3800;
 
-	switch(descorerCtl){
-		case 1: //BtnL1
-			runDescorer(-127);
-			break;
-		case 2: //BtnL2
-			runDescorer(127);
-			break;
-		default:
-			runDescorer(0);
+
+const int heights[NUM_HEIGHTS] = {height1, height2, height3};
+int goalHeight = 0;
+int desiredLiftTicks = heights[0];
+bool isLiftPID = false;
+
+void liftControl(){
+	liftCtl = (master.get_digital(E_CONTROLLER_DIGITAL_L1)) +
+							 (master.get_digital(E_CONTROLLER_DIGITAL_L2) << 1);
+	if(master.get_digital_new_press(E_CONTROLLER_DIGITAL_RIGHT)){
+		isLiftPID = !isLiftPID;
+	}
+
+	if (isLiftPID)
+	{
+		lcd::print(5, "goalHeight: %d", goalHeight);
+		liftCtl = (master.get_digital_new_press(E_CONTROLLER_DIGITAL_L1)) +
+								 (master.get_digital_new_press(E_CONTROLLER_DIGITAL_L2) << 1);
+		if (liftCtl==1 && goalHeight < NUM_HEIGHTS - 1) {
+      // If the goal height is not at maximum and the up button is pressed, increase the setpoint
+      goalHeight++;
+      desiredLiftTicks = heights[goalHeight];
+    }
+		else if (liftCtl==2 && goalHeight > 0) {
+      goalHeight--;
+      desiredLiftTicks = heights[goalHeight];
+    }
+	}
+	else{
+		switch(liftCtl){
+			case 1: //BtnL1
+				runLift(-127);
+				break;
+			case 2: //BtnL2
+				runLift(127);
+				break;
+			default:
+				runLift(0);
+		}
 	}
 }
 
 void tankSpeedControl(){
   tankSpeedCtl = (partner.get_digital(E_CONTROLLER_DIGITAL_UP)) +
 								(partner.get_digital(E_CONTROLLER_DIGITAL_LEFT) << 1) +
-								(partner.get_digital(E_CONTROLLER_DIGITAL_UP) << 2);
+								(partner.get_digital(E_CONTROLLER_DIGITAL_DOWN) << 2);
 
 	switch(tankSpeedCtl){
 		case 1: //BtnUP-Partner

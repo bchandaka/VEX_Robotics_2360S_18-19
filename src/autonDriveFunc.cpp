@@ -1,9 +1,8 @@
-#include "../vars.h"
+#include "vars.h"
 //-----------------Auton Drive FUnctions----------------
 
 void driveStraight(double dist) // distance in inches
 {
-
 	double currentPos = (driveLeft1.get_position() + driveRight1.get_position())/2.0;
 	double desiredDriveTicks = (dist/(4* M_PI))*900 + currentPos;
 	int speed = 80* atan(0.0015 * (desiredDriveTicks - currentPos));
@@ -34,7 +33,6 @@ void driveStraight(double dist) // distance in inches
 }
 
 void turnAngle(float angle){
-  gyro.reset();
 	bool rightTurn = angle > 0;
 
 	float previous = gyro.get_value() / 10.0;

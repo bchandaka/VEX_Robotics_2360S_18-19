@@ -1,4 +1,4 @@
-#include "../vars.h"
+#include "vars.h"
 //------------------Motor Functions------------------
 void runDriveLeft(int volts){
   motorReq[0] = volts;
@@ -19,6 +19,6 @@ void runIndexer(int volts){
 void runIntake(int volts){
   motorReq[6] = volts;
 }
-void runDescorer(int volts){
+void runLift(int volts){
   motorReq[7] = volts;
 }

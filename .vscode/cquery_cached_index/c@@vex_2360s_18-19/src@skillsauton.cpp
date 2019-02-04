@@ -1,4 +1,4 @@
-#include "../vars.h"
+#include "vars.h"
 
 void skillsAuton(){
   delay(1000);

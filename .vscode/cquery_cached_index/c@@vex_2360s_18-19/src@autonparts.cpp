@@ -1,4 +1,4 @@
-#include "../vars.h"
+#include "vars.h"
 
 void getBall(){
   runIntake(-120);

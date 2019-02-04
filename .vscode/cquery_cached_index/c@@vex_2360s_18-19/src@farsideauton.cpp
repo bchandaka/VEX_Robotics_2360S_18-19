@@ -1,4 +1,4 @@
-#include "../vars.h"
+#include "vars.h"
 
 void farSidePlat(){
   delay(200);

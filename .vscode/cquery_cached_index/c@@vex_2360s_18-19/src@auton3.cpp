@@ -1,4 +1,4 @@
-#include "../vars.h"
+#include "vars.h"
 
 void auton3(){
 delay(1500);

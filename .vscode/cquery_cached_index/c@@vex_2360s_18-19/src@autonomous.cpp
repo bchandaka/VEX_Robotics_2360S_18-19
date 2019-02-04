@@ -1,4 +1,4 @@
-#include "../vars.h"
+#include "vars.h"
 
 /*
  * Runs the user autonomous code. This function will be started in its own task
@@ -11,11 +11,11 @@
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
 */
-
+bool AUTON_TEST = false;
 void autonomous() {
   Task slewRateTask (MotorSlewRateTask, (void*)"PROS", TASK_PRIORITY_DEFAULT,
                TASK_STACK_DEPTH_DEFAULT, "slewRate");
-  descorer.set_brake_mode(E_MOTOR_BRAKE_HOLD);
+  lift.set_brake_mode(E_MOTOR_BRAKE_HOLD);
 
     switch(autonVer){
       case 1:
@@ -30,5 +30,13 @@ void autonomous() {
       case 4:
         farSide();
         break;
+      case 5:
+        skillsAuton();
+        break;
+      if(AUTON_TEST){
+        case 6:
+          autonTest();
+          break;
+      }
   }
 }

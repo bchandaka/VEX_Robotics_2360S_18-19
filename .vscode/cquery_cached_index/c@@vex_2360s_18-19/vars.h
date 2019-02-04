@@ -2,7 +2,6 @@
 
 //Declares all variables/functions used in the entire project so all variables/functions can be accessed from any file
 
-extern bool isSkills;
 extern bool autonRunning;
 extern bool autonBlue;
 extern int autonVer;
@@ -18,7 +17,7 @@ extern Motor driveRight2;
 extern Motor flywheel;
 extern Motor indexer;
 extern Motor intake;
-extern Motor descorer;
+extern Motor lift;
 
 extern int MOTOR_NUM;
 extern int MOTOR_MAX_VALUE;
@@ -42,7 +41,7 @@ extern void runDriveRight(int volts);
 extern void runFlywheel(int volts);
 extern void runIndexer(int volts);
 extern void runIntake(int volts);
-extern void runDescorer(int volts);
+extern void runLift(int volts);
 
 extern Controller master;
 extern Controller partner;
@@ -52,7 +51,7 @@ extern int intakeCtl;
 extern void flywheelControl();
 extern void indexerControl();
 extern void intakeControl();
-extern void descorerControl();
+extern void liftControl();
 
 extern int JOY_THRESHOLD;
 extern double tankKp;
@@ -60,19 +59,25 @@ extern double tankKp;
 extern void tankDrive(void* params);
 extern void tankSpeedControl();
 
-extern const bool AUTON_TEST;
+extern bool AUTON_TEST;
 extern void debugMotor(int lcdLine, pros:: Motor motor, std::string motorName, int motorIndex);
 
 extern ADIGyro gyro;
+extern Vision vis;
 
 extern void driveStraight(double dist);
 extern void turnAngle(float angle);
+
+extern bool isLiftPID;
+extern int desiredLiftTicks;
+extern void liftPID();
 
 extern void nearSidePlat();
 extern void nearSide();
 extern void farSide();
 extern void farSidePlat();
 extern void skillsAuton();
+extern void autonTest();
 extern void getBall();
 extern void shootHighFlags();
 extern void shootLowFlag();

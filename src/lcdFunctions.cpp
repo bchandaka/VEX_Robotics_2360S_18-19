@@ -1,16 +1,11 @@
-#include "../vars.h"
+#include "vars.h"
+
 
 //LCD Advanced Functions
-const char RIGHT_ARROW = 199;
-const char LEFT_ARROW = 200;
-
-
-#ifndef NUM_AUTON_OPTIONS
-	#define NUM_AUTON_OPTIONS 4
-#endif
+const int NUM_AUTON_OPTIONS =  AUTON_TEST ? 5:6;
 
 bool autonBlue = false;
-int autonVer = 1;
+int autonVer = AUTON_TEST ? 1 : 6 ;
 
 
 void displayStatus() {
@@ -32,7 +27,12 @@ void displayStatus() {
 			case 4:
 				pros::lcd::set_text(3, "Far Side + No Platform" );
 				break;
-
+			case 5:
+				pros::lcd::set_text(3, "Skills Auton" );
+				break;
+			case 6:
+				pros::lcd::set_text(3, "Auton Test" );
+				break;
 		}
 }
 
