@@ -78,28 +78,28 @@ void indexerControl(){
 }
 
 const int NUM_HEIGHTS = 3;
-const int height1 = 0;
-const int height2 = -1800;
-const int height3 = -3800;
+const int height1 = 4000;
+const int height2 = 2600;
+const int height3 = 760;
 
 
 const int heights[NUM_HEIGHTS] = {height1, height2, height3};
 int goalHeight = 0;
 int desiredLiftTicks = heights[0];
-bool isLiftPID = false;
+bool isLiftPID = true;
 
 void liftControl(){
-	liftCtl = (master.get_digital(E_CONTROLLER_DIGITAL_L1)) +
-							 (master.get_digital(E_CONTROLLER_DIGITAL_L2) << 1);
-	if(master.get_digital_new_press(E_CONTROLLER_DIGITAL_RIGHT)){
+	liftCtl = (partner.get_digital(E_CONTROLLER_DIGITAL_L1)) +
+							 (partner.get_digital(E_CONTROLLER_DIGITAL_L2) << 1);
+	if(partner.get_digital_new_press(E_CONTROLLER_DIGITAL_RIGHT)){
 		isLiftPID = !isLiftPID;
 	}
 
 	if (isLiftPID)
 	{
 		lcd::print(5, "goalHeight: %d", goalHeight);
-		liftCtl = (master.get_digital_new_press(E_CONTROLLER_DIGITAL_L1)) +
-								 (master.get_digital_new_press(E_CONTROLLER_DIGITAL_L2) << 1);
+		liftCtl = (partner.get_digital_new_press(E_CONTROLLER_DIGITAL_L1)) +
+								 (partner.get_digital_new_press(E_CONTROLLER_DIGITAL_L2) << 1);
 		if (liftCtl==1 && goalHeight < NUM_HEIGHTS - 1) {
       // If the goal height is not at maximum and the up button is pressed, increase the setpoint
       goalHeight++;

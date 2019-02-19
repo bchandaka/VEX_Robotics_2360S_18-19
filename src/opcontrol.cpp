@@ -11,26 +11,23 @@ void debugMotor(int lcdLine, pros:: Motor motor, std::string motorName, int moto
 
 void opcontrol() {
   lift.set_brake_mode(E_MOTOR_BRAKE_HOLD);
-
   printf("start%d \n", 1);
   //Start Tasks
 	Task slewRateTask (MotorSlewRateTask, (void*)"PROS", TASK_PRIORITY_DEFAULT,
                             TASK_STACK_DEPTH_DEFAULT, "slewRate");
   Task liftPIDTask (liftPID, (void*)"PROS", TASK_PRIORITY_DEFAULT,
-						                TASK_STACK_DEPTH_DEFAULT, "tankDrive");
+						                TASK_STACK_DEPTH_DEFAULT, "liftTask");
   //register left lcd button to reset gyro
   while (true) { //Controls that will run during driver control
-    //visTest();
-
 
     flywheelControl();
     intakeControl();
-    //indexerControl();
+    indexerControl();
     liftControl();
     tankSpeedControl();
     tankDrive();
     lcd::print(7, "Gyro Value: %f", gyro.get_value());
-    lcd::print(6 , "Motor Value: %f", lift.get_position());
+    lcd::print(6 , "Lift Pos: %d", pot.get_value());
 
     //Testing auton
 
@@ -40,7 +37,6 @@ void opcontrol() {
       autonomous();
       slewRateTask.resume();
       liftPIDTask.resume();
-
     }
 
 

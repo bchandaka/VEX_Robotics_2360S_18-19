@@ -18,7 +18,9 @@ void farSide(){
   int start = millis();
   motorSlew[4] = 127;
   motorSlew[5] = 127;
-
+  getFarBall();
+  shootMiddleFlags();
+  placeSecondCap();
   printf("%d\n",millis()-start);
   printf("autonDone\n");
   motorSlew[4] = 30;

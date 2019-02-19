@@ -7,14 +7,17 @@
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
+bool AUTON_TEST = false;
 
 void initialize() {
+
     pros::lcd::initialize();
     displayStatus();
 
     pros::lcd::register_btn0_cb(on_btnL);
     pros::lcd::register_btn1_cb(on_btnM);
     pros::lcd::register_btn2_cb(on_btnR);
+    gyro.reset();
 }
 
 /**
@@ -22,7 +25,13 @@ void initialize() {
  * the VEX Competition Switch, following either autonomous or opcontrol. When
  * the robot is enabled, this task will exit.
  */
-void disabled() {}
+void disabled() {
+  displayStatus();
+  for (int i = 0;i<8;i++){
+    motorReq[i] = 0;
+  }
+
+}
 
 /**
  * Runs after initialize(), and before autonomous when connected to the Field

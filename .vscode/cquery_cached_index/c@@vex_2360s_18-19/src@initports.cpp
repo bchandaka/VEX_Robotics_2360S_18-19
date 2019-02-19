@@ -14,3 +14,4 @@ Motor lift (4, E_MOTOR_GEARSET_36, false, E_MOTOR_ENCODER_COUNTS);
 
 pros::ADIGyro gyro (2);
 pros::Vision vis (11);
+pros::ADIPotentiometer pot (3);

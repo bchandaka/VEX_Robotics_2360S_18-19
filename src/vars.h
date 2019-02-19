@@ -14,6 +14,8 @@ extern Motor lift;
 
 extern ADIGyro gyro;
 extern Vision vis;
+extern ADIPotentiometer pot;
+extern void debugMotor(int lcdLine, pros:: Motor motor, std::string motorName, int motorIndex);
 
 //Auton-Related Functions/Variables
 extern bool autonRunning;
@@ -36,6 +38,11 @@ extern void shootHighFlags();
 extern void shootLowFlag();
 extern void nearPlatform();
 extern void farPlatform();
+extern void flipSecondCap();
+extern void shootMiddleLowFlag();
+extern void shootMiddleFlags();
+extern void placeSecondCap();
+extern void getFarBall();
 
 extern void driveStraight(double dist);
 extern void turnAngle(float angle);
@@ -45,6 +52,9 @@ extern int desiredLiftTicks;
 extern void liftPID(void* params);
 
 
+extern void drivePID(void* params);
+extern void driveStraightPID(double rightInches, double leftInches);
+extern void curveTurn(double radius, double degrees);
 //OpControl/motor functions and variables
 extern void runDriveLeft(int volts);
 extern void runDriveRight(int volts);
@@ -85,6 +95,5 @@ extern int motorVolt[8];
 extern int sign();
 extern void MotorSlewRateTask(void* params);
 
-extern void debugMotor(int lcdLine, pros:: Motor motor, std::string motorName, int motorIndex);
 
 extern void visTest();
