@@ -19,7 +19,6 @@ void opcontrol() {
 						                TASK_STACK_DEPTH_DEFAULT, "liftTask");
   //register left lcd button to reset gyro
   while (true) { //Controls that will run during driver control
-
     flywheelControl();
     intakeControl();
     indexerControl();

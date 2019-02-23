@@ -21,7 +21,7 @@ void flywheelControl(){
       runFlywheel(127);
 			break;
 		case 2: //BtnA
-      runFlywheel(90);
+      runFlywheel(110);
 			break;
 		case 4: //BtnB
 			runFlywheel(0);

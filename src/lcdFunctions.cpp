@@ -5,7 +5,7 @@
 const int NUM_AUTON_OPTIONS =  AUTON_TEST ? 5:6;
 
 bool autonBlue = true;
-int autonVer = AUTON_TEST ? 6 : 4 ;
+int autonVer = AUTON_TEST ? 6 : 2 ;
 
 
 void displayStatus() {

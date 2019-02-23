@@ -1,7 +1,6 @@
 #include "vars.h"
 
 void nearSidePlat(){
-  delay(200);
   int start = millis();
   motorSlew[4] = 127;
   motorSlew[5] = 127;

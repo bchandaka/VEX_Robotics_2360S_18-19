@@ -5,8 +5,12 @@ void farSidePlat(){
   int start = millis();
   motorSlew[4] = 127;
   motorSlew[5] = 127;
-
+  getFarBall();
+  placeSecondCap();
+  //shootMiddleFlags();
+  farPlatform();
   printf("%d\n",millis()-start);
+
   printf("autonDone\n");
   motorSlew[4] = 30;
   motorSlew[6] = 30;
@@ -19,8 +23,8 @@ void farSide(){
   motorSlew[4] = 127;
   motorSlew[5] = 127;
   getFarBall();
-  shootMiddleFlags();
   placeSecondCap();
+  shootMiddleFlags();
   printf("%d\n",millis()-start);
   printf("autonDone\n");
   motorSlew[4] = 30;
