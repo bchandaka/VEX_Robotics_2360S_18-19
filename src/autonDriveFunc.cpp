@@ -112,7 +112,7 @@ void driveStraight(double dist) // distance in inches
 
 		currentPos = (driveLeft1.get_position() + driveRight1.get_position())/2.0;
 		gyroError = 0-gyro.get_value();
-		if(millis()-start > 1000 && (driveLeft1.get_actual_velocity() == 0 &&  driveRight1.get_actual_velocity() == 0 )){
+		if(millis()-start > 600 && (driveLeft1.get_actual_velocity() == 0 &&  driveRight1.get_actual_velocity() == 0 )){
 			break;
 		}
 	}

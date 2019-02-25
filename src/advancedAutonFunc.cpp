@@ -47,6 +47,6 @@ void liftPID(void* params)
 			//send power to the motors
 			runLift(power);
 		}
-		delay(15);
+		delay(20);
 	}
 }

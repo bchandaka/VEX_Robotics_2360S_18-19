@@ -43,6 +43,7 @@ extern void shootMiddleLowFlag();
 extern void shootMiddleFlags();
 extern void placeSecondCap();
 extern void getFarBall();
+extern void shootHighMiddleFlag();
 
 extern void driveStraight(double dist);
 extern void turnAngle(float angle);

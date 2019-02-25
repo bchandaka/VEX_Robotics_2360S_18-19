@@ -40,12 +40,15 @@ void MotorSlewRateTask(void* params){
 						motorVolt[motorIndex] = std::clamp(currentTmp, MOTOR_MIN_VALUE, MOTOR_MAX_VALUE);
 
 						// finally send it!
+            motorTmp.move(motorVolt[motorIndex]);
+            /*
             if(motorIndex == 4){
               motorTmp.move_velocity(600 * ((double) motorVolt[motorIndex]/127));
             }
             else{
 		          motorTmp.move(motorVolt[motorIndex]);
             }
+            */
         }
         // Wait approx the speed of motor update
         delay( MOTOR_TASK_DELAY );

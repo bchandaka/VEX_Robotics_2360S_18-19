@@ -8,7 +8,6 @@ void nearSidePlat(){
   getBall();
   shootHighFlags();
   shootLowFlag();
-  flipSecondCap();
   nearPlatform();
   printf("%d\n",millis()-start);
   runIntake(0);

@@ -4,8 +4,8 @@
 //LCD Advanced Functions
 const int NUM_AUTON_OPTIONS =  AUTON_TEST ? 5:6;
 
-bool autonBlue = true;
-int autonVer = AUTON_TEST ? 6 : 2 ;
+bool autonBlue = false;
+int autonVer = AUTON_TEST ? 6 : 3 ;
 
 
 void displayStatus() {

@@ -7,7 +7,7 @@ void farSidePlat(){
   motorSlew[5] = 127;
   getFarBall();
   placeSecondCap();
-  //shootMiddleFlags();
+  shootHighMiddleFlag();
   farPlatform();
   printf("%d\n",millis()-start);
 

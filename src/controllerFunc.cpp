@@ -42,7 +42,7 @@ void intakeControl(){
 			runIntake(-127);
 			break;
 		case 2: //BtnR2
-			runIntake(127);
+			runIntake(80);
 			break;
 		case 4: //BtnL1 Partner
 			runIntake(-127);
@@ -51,10 +51,10 @@ void intakeControl(){
 			runIntake(-127);
 			break;
 		case 8: //BtnL2 Partner
-			runIntake(127);
+			runIntake(80);
 			break;
 		case 10: //If both buttons are pressed
-			runIntake(127);
+			runIntake(80);
 			break;
 		default:
 			runIntake(0);
@@ -78,7 +78,7 @@ void indexerControl(){
 }
 
 const int NUM_HEIGHTS = 3;
-const int height1 = 4000;
+const int height1 = 3880;
 const int height2 = 2600;
 const int height3 = 760;
 
