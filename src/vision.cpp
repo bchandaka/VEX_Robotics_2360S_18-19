@@ -1,3 +1,4 @@
+/*
 #include "vars.h"
 //All units are in mm
 double focal_length = 2.8;
@@ -27,3 +28,4 @@ void visTest(){
   double distance = distanceToSig(0,1);
   lcd::print(5, "dist: %f ", distance);
 }
+*/

@@ -3,6 +3,24 @@
 Controller master (E_CONTROLLER_MASTER);
 Controller partner (E_CONTROLLER_PARTNER);
 
+//-----------------Tank Drive Function--------------
+#define JOY_THRESHOLD	15
+double tankKp = 1.2;
+int    ctl_l;
+int    ctl_r;
+int    drive_l;
+int    drive_r;
+void tankDrive(){
+	// Get tank drive vertical joystick control
+	ctl_l = master.get_analog(E_CONTROLLER_ANALOG_LEFT_Y)/tankKp;
+	ctl_r = master.get_analog(E_CONTROLLER_ANALOG_RIGHT_Y)/tankKp;
+	// Ignore joystick near center to prevent powering motors when the joystick doesn't properly center to zero
+	drive_l = (abs(ctl_l) <= JOY_THRESHOLD) ? 0:ctl_l;
+	drive_r = (abs(ctl_r) <= JOY_THRESHOLD) ? 0:ctl_r;
+  //Send it!
+	leftDrive.run(drive_l);
+	rightDrive.run(drive_r);
+}
 
 //------------Map Controller Input to Motors---------
 int flywheelCtl; //Variable to control flywheel switch statement
@@ -15,18 +33,34 @@ void flywheelControl(){
 	flywheelCtl = (partner.get_digital(E_CONTROLLER_DIGITAL_X)) +
 								(partner.get_digital(E_CONTROLLER_DIGITAL_A) << 1) +
 								(partner.get_digital(E_CONTROLLER_DIGITAL_B) << 2);
-
-	switch(flywheelCtl){
-		case 1: //BtnX
-      runFlywheel(127);
-			break;
-		case 2: //BtnA
-      runFlywheel(110);
-			break;
-		case 4: //BtnB
-			runFlywheel(0);
-			break;
+	if(isFlyPID){
+		switch(flywheelCtl){
+			case 1: //BtnX
+				desiredFlywheelVel = 550;
+				break;
+			case 2: //BtnA
+				desiredFlywheelVel = 500;
+				break;
+			case 4: //BtnB
+				desiredFlywheelVel = 0;
+				break;
+		}
 	}
+	else{
+		switch(flywheelCtl){
+			case 1: //BtnX
+
+	      flywheel.run(127);
+				break;
+			case 2: //BtnA
+	      flywheel.run(110);
+				break;
+			case 4: //BtnB
+				flywheel.run(0);
+				break;
+		}
+	}
+
 }
 
 void intakeControl(){
@@ -39,25 +73,25 @@ void intakeControl(){
 							(partner.get_digital(E_CONTROLLER_DIGITAL_R2) << 3);
 	switch(intakeCtl){
 		case 1 : //BtnR1
-			runIntake(-127);
+			intake.run(-127);
 			break;
 		case 2: //BtnR2
-			runIntake(80);
+			intake.run(80);
 			break;
 		case 4: //BtnL1 Partner
-			runIntake(-127);
+			intake.run(-127);
 			break;
 		case 5: //If both buttons are pressed
-			runIntake(-127);
+			intake.run(-127);
 			break;
 		case 8: //BtnL2 Partner
-			runIntake(80);
+			intake.run(80);
 			break;
 		case 10: //If both buttons are pressed
-			runIntake(80);
+			intake.run(80);
 			break;
 		default:
-			runIntake(0);
+			intake.run(0);
 	}
 }
 
@@ -67,13 +101,13 @@ void indexerControl(){
 
 	switch(indexerCtl){
 		case 1: //BtnR1
-			runIndexer(127);
+			indexer.run(127);
 			break;
 		case 2: //BtnR2
-			runIndexer(-127);
+			indexer.run(-127);
 			break;
 		default:
-			runIndexer(0);
+			indexer.run(0);
 	}
 }
 
@@ -97,7 +131,6 @@ void liftControl(){
 
 	if (isLiftPID)
 	{
-		lcd::print(5, "goalHeight: %d", goalHeight);
 		liftCtl = (partner.get_digital_new_press(E_CONTROLLER_DIGITAL_L1)) +
 								 (partner.get_digital_new_press(E_CONTROLLER_DIGITAL_L2) << 1);
 		if (liftCtl==1 && goalHeight < NUM_HEIGHTS - 1) {
@@ -113,13 +146,13 @@ void liftControl(){
 	else{
 		switch(liftCtl){
 			case 1: //BtnL1
-				runLift(-127);
+				lift.run(-127);
 				break;
 			case 2: //BtnL2
-				runLift(127);
+				lift.run(127);
 				break;
 			default:
-				runLift(0);
+				lift.run(0);
 		}
 	}
 }

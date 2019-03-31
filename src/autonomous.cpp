@@ -12,13 +12,12 @@
  * from where it left off.
 */
 void autonomous() {
-  Task slewRateTask (MotorSlewRateTask, (void*)"PROS", TASK_PRIORITY_DEFAULT,
+  Task slewRateTask (smartMotor::MotorSlewRateTask, (void*)"PROS", TASK_PRIORITY_DEFAULT,
                TASK_STACK_DEPTH_DEFAULT, "slewRate");
   Task liftPIDTask (liftPID, (void*)"PROS", TASK_PRIORITY_DEFAULT,
   					                TASK_STACK_DEPTH_DEFAULT, "liftTask");
-  lift.set_brake_mode(E_MOTOR_BRAKE_HOLD);
   isLiftPID = true;
-  desiredLiftTicks = pot.get_value();
+  desiredLiftTicks = lift.getPosition();
     switch(autonVer){
       case 1:
         nearSidePlat();

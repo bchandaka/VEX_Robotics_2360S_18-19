@@ -3,8 +3,6 @@
 void skillsAuton(){
   delay(1000);
   int start = millis();
-  motorSlew[4] = 127;
-  motorSlew[5] = 127;
 
   /*getFarBall();
   runIntake(120);
@@ -29,7 +27,7 @@ void skillsAuton(){
   //come back to first flags
   driveStraight(-30);
   turnAngle(-90);
-  */
+
   nearSidePlat();
   driveStraight(26);
   printf("%d\n",millis()-start);
@@ -38,4 +36,5 @@ void skillsAuton(){
   printf("autonDone\n");
   motorSlew[4] = 30;
   motorSlew[6] = 30;
+  */
 }

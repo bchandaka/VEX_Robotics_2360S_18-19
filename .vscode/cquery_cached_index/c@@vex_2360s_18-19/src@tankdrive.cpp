@@ -14,6 +14,6 @@ void tankDrive(){
 	drive_l = (abs(ctl_l) <= JOY_THRESHOLD) ? 0:ctl_l;
 	drive_r = (abs(ctl_r) <= JOY_THRESHOLD) ? 0:ctl_r;
   //Send it!
-	runDriveLeft(drive_l);
-	runDriveRight(drive_r);
+	leftDrive.run(drive_l);
+	rightDrive.run(drive_r);
 }
