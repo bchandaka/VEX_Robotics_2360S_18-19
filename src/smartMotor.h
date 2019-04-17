@@ -10,11 +10,13 @@ class smartMotor{
     int slewRate;
     int reqVel;
     int curVel;
+    double desiredPos;
     smartMotor* slaveMtrPointer;
     pros::Motor* motorPointer;
     sensorType encoder;
     pros::ADIEncoder * quadPointer;
     pros::ADIPotentiometer * potPointer;
+    bool isModePID;
     double kP;
     double kI;
     double kD;
@@ -38,6 +40,9 @@ class smartMotor{
     bool getReversed();
     pros::Motor getMtr();
     double getPosition();
+    double getkP();
+    bool isPID();
+    double getTarget();
     //-----Setters-----
     void run(int vel);
     void setCurVel(int vel);
@@ -47,6 +52,8 @@ class smartMotor{
     //PID
     void setPIDConst(double newkP, double newkI, double newkD);
     double calcPID(double error, double integral, double derivative);
+    void setIsPID(bool newPIDMode);
+    void setTarget(double target);
 
     void debug(int lcdLine);
 };

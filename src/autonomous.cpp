@@ -12,33 +12,35 @@
  * from where it left off.
 */
 void autonomous() {
-  Task slewRateTask (smartMotor::MotorSlewRateTask, (void*)"PROS", TASK_PRIORITY_DEFAULT,
-               TASK_STACK_DEPTH_DEFAULT, "slewRate");
+  //Start Tasks
+	Task slewRateTask (smartMotor::MotorSlewRateTask, (void*)"PROS", TASK_PRIORITY_DEFAULT,
+                            TASK_STACK_DEPTH_DEFAULT, "slewRate");
   Task liftPIDTask (liftPID, (void*)"PROS", TASK_PRIORITY_DEFAULT,
-  					                TASK_STACK_DEPTH_DEFAULT, "liftTask");
-  isLiftPID = true;
-  desiredLiftTicks = lift.getPosition();
-    switch(autonVer){
-      case 1:
-        nearSidePlat();
+						                TASK_STACK_DEPTH_DEFAULT, "liftTask");
+	lift.setIsPID(true);
+	lift.setTarget(300);
+
+  switch(autonVer){
+    case 1:
+      nearSidePlat();
+      break;
+    case 2:
+      nearSide();
+      break;
+    case 3:
+      farSidePlat();
+      break;
+    case 4:
+      farSide();
+      break;
+    case 5:
+      skillsAuton();
+      break;
+    case 6:
+        if(AUTON_TEST){
+          autonTest();
+        }
         break;
-      case 2:
-        nearSide();
-        break;
-      case 3:
-        farSidePlat();
-        break;
-      case 4:
-        farSide();
-        break;
-      case 5:
-        skillsAuton();
-        break;
-      case 6:
-          if(AUTON_TEST){
-            autonTest();
-          }
-          break;
   }
 
 }

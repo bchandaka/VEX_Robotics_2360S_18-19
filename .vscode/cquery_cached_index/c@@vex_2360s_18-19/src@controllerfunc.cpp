@@ -33,34 +33,18 @@ void flywheelControl(){
 	flywheelCtl = (partner.get_digital(E_CONTROLLER_DIGITAL_X)) +
 								(partner.get_digital(E_CONTROLLER_DIGITAL_A) << 1) +
 								(partner.get_digital(E_CONTROLLER_DIGITAL_B) << 2);
-	if(isFlyPID){
-		switch(flywheelCtl){
-			case 1: //BtnX
-				desiredFlywheelVel = 550;
-				break;
-			case 2: //BtnA
-				desiredFlywheelVel = 500;
-				break;
-			case 4: //BtnB
-				desiredFlywheelVel = 0;
-				break;
-		}
-	}
-	else{
-		switch(flywheelCtl){
-			case 1: //BtnX
 
-	      flywheel.run(127);
-				break;
-			case 2: //BtnA
-	      flywheel.run(110);
-				break;
-			case 4: //BtnB
-				flywheel.run(0);
-				break;
-		}
+	switch(flywheelCtl){
+		case 1: //BtnX
+			flywheel.run(127);
+			break;
+		case 2: //BtnA
+			flywheel.run(127);
+			break;
+		case 4: //BtnB
+			flywheel.run(0);
+			break;
 	}
-
 }
 
 void intakeControl(){
@@ -71,27 +55,32 @@ void intakeControl(){
 							(master.get_digital(E_CONTROLLER_DIGITAL_R2) << 1)+
 							(partner.get_digital(E_CONTROLLER_DIGITAL_R1) << 2) +
 							(partner.get_digital(E_CONTROLLER_DIGITAL_R2) << 3);
-	switch(intakeCtl){
-		case 1 : //BtnR1
-			intake.run(-127);
-			break;
-		case 2: //BtnR2
-			intake.run(80);
-			break;
-		case 4: //BtnL1 Partner
-			intake.run(-127);
-			break;
-		case 5: //If both buttons are pressed
-			intake.run(-127);
-			break;
-		case 8: //BtnL2 Partner
-			intake.run(80);
-			break;
-		case 10: //If both buttons are pressed
-			intake.run(80);
-			break;
-		default:
-			intake.run(0);
+	if(bottomLimit.get_value() && false){
+
+	}
+	else{
+		switch(intakeCtl){
+			case 1 : //BtnR1
+				intake.run(-127);
+				break;
+			case 2: //BtnR2
+				intake.run(60);
+				break;
+			case 4: //BtnL1 Partner
+				intake.run(-127);
+				break;
+			case 5: //If both buttons are pressed
+				intake.run(-127);
+				break;
+			case 8: //BtnL2 Partner
+				intake.run(60);
+				break;
+			case 10: //If both buttons are pressed
+				intake.run(60);
+				break;
+			default:
+					intake.run(0);
+		}
 	}
 }
 
@@ -99,48 +88,47 @@ void indexerControl(){
 	indexerCtl = (master.get_digital(E_CONTROLLER_DIGITAL_L1)) +
 							 (master.get_digital(E_CONTROLLER_DIGITAL_L2) << 1);
 
-	switch(indexerCtl){
-		case 1: //BtnR1
-			indexer.run(127);
-			break;
-		case 2: //BtnR2
-			indexer.run(-127);
-			break;
-		default:
-			indexer.run(0);
+		switch(indexerCtl){
+			case 1: //BtnR1
+				indexer.run(127);
+				break;
+			case 2: //BtnR2
+				indexer.run(-127);
+				break;
+			default:
+				indexer.run(0);
+
 	}
 }
 
 const int NUM_HEIGHTS = 3;
-const int height1 = 3880;
-const int height2 = 2600;
-const int height3 = 760;
+const int height1 = 300;
+const int height2 = 1300;
+const int height3 = 3400;
 
 
 const int heights[NUM_HEIGHTS] = {height1, height2, height3};
 int goalHeight = 0;
-int desiredLiftTicks = heights[0];
-bool isLiftPID = true;
 
 void liftControl(){
 	liftCtl = (partner.get_digital(E_CONTROLLER_DIGITAL_L1)) +
 							 (partner.get_digital(E_CONTROLLER_DIGITAL_L2) << 1);
 	if(partner.get_digital_new_press(E_CONTROLLER_DIGITAL_RIGHT)){
-		isLiftPID = !isLiftPID;
+		lift.setIsPID(!(lift.isPID()));
 	}
 
-	if (isLiftPID)
+	if (lift.isPID())
 	{
 		liftCtl = (partner.get_digital_new_press(E_CONTROLLER_DIGITAL_L1)) +
 								 (partner.get_digital_new_press(E_CONTROLLER_DIGITAL_L2) << 1);
 		if (liftCtl==1 && goalHeight < NUM_HEIGHTS - 1) {
       // If the goal height is not at maximum and the up button is pressed, increase the setpoint
       goalHeight++;
-      desiredLiftTicks = heights[goalHeight];
+      lift.setTarget(heights[goalHeight]);
     }
 		else if (liftCtl==2 && goalHeight > 0) {
       goalHeight--;
-      desiredLiftTicks = heights[goalHeight];
+			lift.setTarget(heights[goalHeight]);
     }
 	}
 	else{

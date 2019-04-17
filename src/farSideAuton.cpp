@@ -5,8 +5,6 @@ void farSidePlat(){
   int start = millis();
 
   getFarBall();
-  placeSecondCap();
-  shootHighMiddleFlag();
   farPlatform();
   printf("%d\n",millis()-start);
 
@@ -18,8 +16,8 @@ void farSide(){
   int start = millis();
 
   getFarBall();
+  shootHighMiddleFlag();
   placeSecondCap();
-  shootMiddleFlags();
   printf("%d\n",millis()-start);
   printf("autonDone\n");
 

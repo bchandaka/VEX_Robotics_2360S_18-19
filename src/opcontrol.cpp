@@ -9,21 +9,27 @@ void opcontrol() {
                             TASK_STACK_DEPTH_DEFAULT, "slewRate");
   Task liftPIDTask (liftPID, (void*)"PROS", TASK_PRIORITY_DEFAULT,
 						                TASK_STACK_DEPTH_DEFAULT, "liftTask");
-	desiredLiftTicks = lift.getPosition();
-	isFlyPID = true;
-	Task flyWheelVelPIDTask (flyWheelVelPID, (void*)"PROS", TASK_PRIORITY_DEFAULT,
-														TASK_STACK_DEPTH_DEFAULT, "flyWheelVelControl");
+	lift.setIsPID(true);
+	lift.setTarget(300);
+
+	//Task ballTrackTask (ballTracker, (void*)"PROS", TASK_PRIORITY_DEFAULT,
+														//TASK_STACK_DEPTH_DEFAULT, "liftTask");
+
+	//Task flyWheelVelPIDTask (flyWheelVelPID, (void*)"PROS", TASK_PRIORITY_DEFAULT,
+														//TASK_STACK_DEPTH_DEFAULT, "flyWheelVelControl");
+	//flywheel.setIsPID(true);
   //register left lcd button to reset gyro
+
   while (true) { //Controls that will run during driver control
-    flywheelControl();
-    intakeControl();
-    indexerControl();
-    liftControl();
-    tankSpeedControl();
-    tankDrive();
+		tankDrive();
+		tankSpeedControl();
+		flywheelControl();
+		indexerControl();
+		intakeControl();
+		liftControl();
+		lcd::print(5, "Gyro: %f", gyro.get_value());
+		lcd::print(6, "Lift: %f", lift.getPosition());
 		/*
-		leftDrive.debug(0);
-		rightDrive.debug(1);
 		intake.debug(2);
 		indexer.debug(3);
 		flywheel.debug(4);

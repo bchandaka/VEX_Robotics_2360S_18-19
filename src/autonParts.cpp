@@ -2,77 +2,61 @@
 
 void getBall(){
   intake.run(-120);
-  flywheel.run(126);
-  driveStraight(43.0);
+  driveStraightPID(43.0);
   printf("moving backward!\n");
-  driveStraight(-31.0);
+  flywheel.run(127);
+  driveStraightPID(-32.25);
+  intake.run(0);
 }
 
 void shootHighFlags(){
   //face the flags
-  turnAngle(-92);
-  driveStraight(6);
-  intake.run(0);
-  delay(100);
-  printf("Shoot the top flag!\n");
-  indexer.run(126);
-  delay(150);
+  indexer.run(127);
+  delay(20);
   indexer.run(0);
-  printf("Move closer to shoot middle flag!\n");
-  flywheel.run(127);
+  turnAngle(-89);
+  driveStraightPID(14);
   intake.run(-120);
-  driveStraight(21);
-  delay(100);
+  printf("Shoot the top flag!\n");
+  indexer.run(127);
+  delay(200);
   intake.run(0);
+  delay(300);
+  indexer.run(0);
+  intake.run(-120);
+  printf("Move closer to shoot middle flag!\n");
+  driveStraightPID(17.5);
   printf("Shoot the middle flag!\n");
   indexer.run(120);
-  delay(400);
+  delay(500);
   indexer.run(0);
-  flywheel.run(0);
 }
 void shootLowFlag(){
-  if(autonBlue){
     printf("Ram the bottom flag!\n");
-    turnAngle(-15);
-    driveStraight(16);
+    turnAngle(-14);
+    driveStraightPID(14);
     printf("back out of flag and come back!\n");
-    driveStraight(-16);
-    turnAngle(15);
-    intake.run(80);
-  }
-  else{
-    printf("Ram the bottom flag!\n");
-    turnAngle(-15);
-    driveStraight(16);
-    printf("back out of flag and come back!\n");
-    driveStraight(-16);
-    turnAngle(15);
-    intake.run(80);
-  }
+    indexer.run(120);
+    driveStraightPID(-14);
+    turnAngle(14);
+    intake.run(70);
+    indexer.run(0);
 }
 
 void flipSecondCap(){
-  driveStraight(-5);
+  driveStraightPID(-7);
   turnAngle(90);
-  driveStraight(22);
+  driveStraightPID(13);
+  driveStraightPID(7);
 }
 void shootMiddleLowFlag(){
-  if(autonBlue){
-    driveStraight(-3);
+    driveStraightPID(-5);
     intake.run(0);
     turnAngle(-45);
-    intake.run(0);
-    driveStraight(30);
-    turnAngle(-60);
-  }
-  else{
-    driveStraight(-3);
-    intake.run(0);
-    turnAngle(-45);
-    intake.run(0);
-    driveStraight(30);
-    turnAngle(-60);
-  }
+    indexer.run(120);
+    delay(500);
+    indexer.run(0);
+    flywheel.run(0);
 }
 void nearPlatform(){
   printf("face platform!\n");
@@ -83,14 +67,76 @@ void nearPlatform(){
   printf("get on the red platform!\n");
   driveStraight(57);
 }
-
+//-----Far Side Auton Segments-----
 void getFarBall(){
   intake.run(-120);
-  flywheel.run(127);
-  driveStraight(43.0);
+  driveStraightPID(24.0);
+  driveStraightPID(23.0);
   printf("moving backward!\n");
-  //driveStraight(-32.0);
+  driveStraight(-6);
+  indexer.run(127);
+  delay(100);
+  indexer.run(0);
+  turnAngle(-89);
+  intake.run(-120);
 }
+void farPlatform(){
+  printf("get on the platform!\n");
+  driveStraightPID(-8);
+  driveStraightPID(54);
+}
+void shootHighMiddleFlag(){
+  intake.run(0);
+  printf("Shoot the top flag!\n");
+  indexer.run(127);
+  delay(400);
+  intake.run(-120);
+  delay(150);
+  indexer.run(0); //Starting here
+  turnAngle(-5);
+  flywheel.run(0);
+}
+
+void placeSecondCap(){
+    driveStraightPID(-18.5);
+    lift.setTarget(1300);
+    delay(100);
+    delay(100);
+    delay(100);
+    delay(100);
+    delay(100);
+    delay(100);
+    driveStraightPID(10);
+    turnAngle(-30);
+    turnAngle(-30);
+    delay(50);
+    turnAngle(-30);
+    driveStraightPID(45);
+    lift.setTarget(3400);
+    delay(100);
+    delay(100);
+    delay(100);
+    delay(100);
+    delay(100);
+    delay(100);
+    delay(100);
+    delay(100);
+    delay(100);
+    delay(100);
+    //driveStraight(15);
+    /*
+    turnAngle(-130);
+    driveStraight(17);
+    lift.setTarget(760);
+    driveStraight(5);
+    delay(200);
+    driveStraight(-14);
+    lift.setTarget(4000);
+    turnAngle(-120);
+    driveStraight(17);
+    */
+}
+
 void shootMiddleFlags(){
   intake.run(0);
   turnAngle(-54);
@@ -111,80 +157,4 @@ void shootMiddleFlags(){
   indexer.run(0);
   flywheel.run(0);
   driveStraight(6);
-}
-void shootHighMiddleFlag(){
-  if(autonBlue){
-  intake.run(0);
-  turnAngle(-47);
-  delay(300);
-  printf("Shoot the top flag!\n");
-  indexer.run(110);
-  delay(200);
-  intake.run(-120);
-  delay(150);
-  indexer.run(0); //Starting here
-  }
-  else{
-    intake.run(0);
-    turnAngle(-51);
-    delay(300);
-    printf("Shoot the top flag!\n");
-    indexer.run(110);
-    delay(200);
-    intake.run(-120);
-    indexer.run(0); //Starting here
-  }
-}
-
-void placeSecondCap(){
-  if(autonBlue){
-    driveStraight(-15.0);
-    intake.run(0);
-    turnAngle(-135);
-    driveStraight(-26.5);
-    desiredLiftTicks = 2600;
-    delay(100);
-    delay(100);
-    delay(100);
-    delay(200);
-
-    driveStraight(26.5);
-    turnAngle(-130);
-    driveStraight(17);
-    desiredLiftTicks = 760;
-    driveStraight(5);
-    delay(200);
-    driveStraight(-14);
-    desiredLiftTicks = 4000;
-    turnAngle(-120);
-    driveStraight(17);
-  }
-  else{
-    driveStraight(-15.0);
-    intake.run(0);
-    turnAngle(-141);
-    driveStraight(-26.5);
-    desiredLiftTicks = 2600;
-    delay(100);
-    delay(100);
-    delay(100);
-    delay(200);
-
-    driveStraight(26.5);
-    turnAngle(-130);
-    driveStraight(17);
-    desiredLiftTicks = 760;
-    driveStraight(5);
-    delay(200);
-    driveStraight(-14);
-    desiredLiftTicks = 4000;
-    turnAngle(-120);
-    driveStraight(15);
-}
-}
-
-void farPlatform(){
-  printf("get on the platform!\n");
-  driveStraight(38);
-
 }

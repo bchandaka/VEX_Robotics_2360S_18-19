@@ -11,8 +11,11 @@ smartMotor::smartMotor( int port,
     this->slewRate = 30;
     this->reqVel = 10;
     this->curVel = 0;
+    this->desiredPos = 0;
     this-> motorPointer = new pros::Motor(port, gearset, reversed, pros::E_MOTOR_ENCODER_COUNTS);
     this-> encoder = integrated;
+
+    this-> isModePID = false;
     this-> kP = 0;
     this-> kI = 0;
     this-> kD = 0;
@@ -57,6 +60,15 @@ double smartMotor::getPosition(){
       break;
   }
 }
+double smartMotor::getkP(){
+  return kP;
+}
+bool smartMotor::isPID(){
+  return isModePID;
+}
+double smartMotor::getTarget(){
+  return desiredPos;
+}
 //------Setters------
 void smartMotor::run(int vel){
   reqVel = vel;
@@ -91,7 +103,7 @@ void smartMotor::addSlave(smartMotor* slaveMtr){
   slaveMtrPointer = slaveMtr;
 }
 
-//PID
+//-----PID-----
 void smartMotor::setPIDConst(double kP, double kI, double kD){
     this->kP = kP;
     this->kI = kI;
@@ -101,6 +113,15 @@ void smartMotor::setPIDConst(double kP, double kI, double kD){
 double smartMotor::calcPID(double error, double integral, double derivative){
     return error* (kP) + integral * (kI) + derivative * (kD);
 }
+
+void smartMotor::setIsPID(bool newPIDMode){
+  isModePID = newPIDMode;
+}
+
+void smartMotor::setTarget(double target){
+  desiredPos = target;
+}
+
 void smartMotor::debug(int lcdLine){
   pros::lcd::initialize();
   pros::lcd::print(lcdLine,"Port:%d Pwr: %d, Pos:%f", port, curVel, getPosition());

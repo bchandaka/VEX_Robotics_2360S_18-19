@@ -4,7 +4,7 @@
 //LCD Advanced Functions
 const int NUM_AUTON_OPTIONS =  AUTON_TEST ? 5:6;
 
-bool autonBlue = false;
+bool autonBlue = true;
 int autonVer = AUTON_TEST ? 6 : 3 ;
 
 
@@ -13,6 +13,8 @@ void displayStatus() {
     std::string line3 = std::to_string(autonVer);
     pros::lcd::set_text(0, "Side (mid btn):   " + line2);
     pros::lcd::set_text(1, "AutonNum (right btn):" + line3);
+    lcd::print(5, "Gyro: %f", gyro.get_value());
+
 		switch(autonVer){
 			case 1:
 				pros::lcd::set_text(3, "Near Side + Platform" );

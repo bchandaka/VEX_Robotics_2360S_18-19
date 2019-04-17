@@ -11,12 +11,9 @@ void nearSidePlat(){
   intake.run(0);
   indexer.run(0);
   printf("autonDone\n");
-
 }
 void nearSide(){
-  delay(200);
   int start = millis();
-
   printf("auton1\n");
   getBall();
   shootHighFlags();
@@ -27,5 +24,4 @@ void nearSide(){
   intake.run(0);
   indexer.run(0);
   printf("autonDone\n");
-
 }

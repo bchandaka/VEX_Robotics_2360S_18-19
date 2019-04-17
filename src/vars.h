@@ -13,7 +13,9 @@ extern smartMotor intake;
 extern smartMotor lift;
 extern ADIGyro gyro;
 extern Vision vis;
-
+extern ADIDigitalIn bottomLimit;
+extern ADIDigitalIn topLimit;
+extern ADILightSensor  lightSensor;
 extern smartMotor* allMotors[8];
 
 //Driver Control Related Vars
@@ -26,7 +28,7 @@ extern void flywheelControl();
 extern void indexerControl();
 extern void intakeControl();
 extern void liftControl();
-
+extern void ballTracker(void*  params);
 extern int JOY_THRESHOLD;
 extern double tankKp;
 extern void tankDrive();
@@ -63,17 +65,13 @@ extern void shootHighMiddleFlag();
 extern void driveStraight(double dist);
 extern void turnAngle(float angle);
 
-extern bool isLiftPID;
-extern int desiredLiftTicks;
 extern void liftPID(void* params);
-extern bool test;
-extern bool isFlyPID;
-extern int desiredFlywheelVel;
+
 extern void flyWheelVelPID(void* params);
 
 extern void drivePID(void* params);
-extern void driveStraightPID(double rightInches, double leftInches);
+extern void driveStraightPID(double inches);
 extern void curveTurn(double radius, double degrees);
-
+extern void faceAngle(double globalAngle);
 
 extern void visTest();

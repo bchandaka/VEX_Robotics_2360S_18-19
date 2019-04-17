@@ -4,11 +4,11 @@
 
 
 //-----------------Auton Drive FUnctions----------------
-void driveStraightPID(double rightInches, double leftInches) // distance in inches
+void driveStraightPID(double inches) // distance in inches
 {
 	//Setup the constants for the P, I, and D aspects of the control loop
 		//constants determined through experimentation
-		const float leftkP = 0.182;//.182
+		const float leftkP = 0.17;//.182
 		const float leftkI = 0.01;
 		const float leftkD = 0.22;//.2
 		const float rightkP = 0.169;//.17
@@ -26,16 +26,20 @@ void driveStraightPID(double rightInches, double leftInches) // distance in inch
 		(leftDrive.getMtr()).tare_position();
 		(rightDrive.getMtr()).tare_position();
 
-		double desiredLeftDriveTicks = (rightInches/(4* M_PI))*900;
-		double desiredRightDriveTicks = (leftInches/(4* M_PI))*900;
+		double desiredLeftDriveTicks = (inches/(4* M_PI))*900;
+		double desiredRightDriveTicks = (inches/(4* M_PI))*900;
 		int leftPrevError = desiredLeftDriveTicks - leftDrive.getPosition();
 		int rightPrevError = desiredRightDriveTicks - rightDrive.getPosition();
-		while((fabs(desiredLeftDriveTicks- leftDrive.getPosition()) > 9 || fabs(desiredRightDriveTicks- rightDrive.getPosition()) > 9))
+
+		const double gyroKp = 0.005;
+		int gyroError = 0;
+		int initialGyro = gyro.get_value();
+		int start = millis();
+		while((fabs(desiredLeftDriveTicks- leftDrive.getPosition()) > 7 && fabs(desiredRightDriveTicks- rightDrive.getPosition()) > 7))
 		{
 				delay(15);
-				//driveMutex.take(5000);
 				//Proportional component, calculates the difference between the desired position and the robot's current position
-				leftError = desiredLeftDriveTicks - leftDrive.getPosition();
+				leftError = desiredLeftDriveTicks - (leftDrive.getPosition()+rightDrive.getPosition())/2.0;
 				rightError = desiredRightDriveTicks - rightDrive.getPosition();
 				//Integral component, sums up the errors to account for smaller values of error that cannot be rectified
 				leftIntegral += leftError;
@@ -56,15 +60,17 @@ void driveStraightPID(double rightInches, double leftInches) // distance in inch
 				//multiply each component by each its repective constant and send it to the motors
 				//left_power = leftError*leftkP + leftIntegral*leftkI + leftDeriv* leftkD; //std::clamp(int(leftError*leftkP + leftIntegral*leftkI + leftDeriv* leftkD), -127, 127);
 				//right_power = rightError*rightkP + rightIntegral*rightkI + rightDeriv* rightkD;//std::clamp(int(rightError*rightkP + rightIntegral*rightkI + rightDeriv* rightkD), -127,127);
-				left_power = std::clamp(int(leftError*leftkP + leftIntegral*leftkI + leftDeriv* leftkD), -121, 121);
-				right_power = std::clamp(int(rightError*rightkP + rightIntegral*rightkI + rightDeriv* rightkD), -118,118);
+				left_power = std::clamp(int(leftError*leftkP + leftIntegral*leftkI + leftDeriv* leftkD), -114, 114);
+				right_power = std::clamp(int(rightError*rightkP + rightIntegral*rightkI + rightDeriv* rightkD), -114,114);
 				//send power to the motors
-				leftDrive.run(left_power);
-				rightDrive.run(right_power);
+				leftDrive.run(left_power); //- (gyroError *gyroKp));
+				rightDrive.run(right_power);//+ (gyroError *gyroKp));
 				printf("leftPower: %f\n", left_power);
 				printf("rightPower: %f\n", right_power);
-
-
+				if(millis()-start > 300 && ((leftDrive.getMtr()).get_actual_velocity() == 0 &&  (rightDrive.getMtr()).get_actual_velocity() == 0 )){
+					break;
+				}
+				gyroError = initialGyro-gyro.get_value();
 		}
 		leftDrive.run(0);
 		rightDrive.run(0);
@@ -73,7 +79,6 @@ void curveTurn(double radius, double degrees){
 	double rightInches = 2 * (degrees/360) * M_PI * (radius -7);
 	double leftInches = 2 * (degrees/360) * M_PI * (radius +7);
 	printf("rightInches %f", rightInches);
-	driveStraightPID(rightInches,  leftInches);
 
 }
 void driveStraight(double dist) // distance in inches
@@ -105,7 +110,16 @@ void driveStraight(double dist) // distance in inches
 	leftDrive.run(0);
 	rightDrive.run(0);
 }
-
+void faceAngle(double target){
+	float newAngle = (target - gyro.get_value()/10.0);
+	if (newAngle > 180){
+		newAngle = 180-newAngle;
+	}
+	else if (newAngle < -180){
+		newAngle = -180-newAngle;
+	}
+	turnAngle(newAngle);
+}
 void turnAngle(float angle){
 	bool rightTurn = angle > 0;
 
@@ -114,12 +128,12 @@ void turnAngle(float angle){
 	float sum = 0;
 	float angleDifference = angle;
 
-	const int speed = 85;
+	const int speed = 80;
 
 	float leftSpeed = autonBlue ? (rightTurn ? -speed : speed):(rightTurn ? speed : -speed);
 	float rightSpeed = -leftSpeed;
-	const int baseRightSpeed = 17*((rightSpeed > 0) - (rightSpeed < 0));
-	const int baseLeftSpeed = 17*((leftSpeed > 0) - (leftSpeed < 0));
+	const int baseRightSpeed = 20*((rightSpeed > 0) - (rightSpeed < 0));
+	const int baseLeftSpeed = 20*((leftSpeed > 0) - (leftSpeed < 0));
 
 	const float K = 0.0179;
 	int start = millis();
@@ -135,7 +149,7 @@ void turnAngle(float angle){
 		leftDrive.run( leftSpeed * atan(K * fabs(angleDifference)) + baseLeftSpeed);
 		rightDrive.run( rightSpeed * atan(K * fabs(angleDifference)) + baseRightSpeed);
 		delay(20);
-		if(millis()-start > 600 && ((leftDrive.getMtr()).get_actual_velocity() == 0 &&  (rightDrive.getMtr()).get_actual_velocity() == 0 )){
+		if(millis()-start > 300 && ((leftDrive.getMtr()).get_actual_velocity() == 0 &&  (rightDrive.getMtr()).get_actual_velocity() == 0 )){
 			break;
 		}
 	}
