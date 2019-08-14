@@ -3,7 +3,7 @@
 
 
 
-//-----------------Auton Drive FUnctions----------------
+//-----------------Auton Drive Functions----------------
 void driveStraightPID(double inches) // distance in inches
 {
 	//Setup the constants for the P, I, and D aspects of the control loop
@@ -38,7 +38,7 @@ void driveStraightPID(double inches) // distance in inches
 		while((fabs(desiredLeftDriveTicks- leftDrive.getPosition()) > 7 && fabs(desiredRightDriveTicks- rightDrive.getPosition()) > 7))
 		{
 				delay(15);
-				//Proportional component, calculates the difference between the desired position and the robot's current position
+				//test
 				leftError = desiredLeftDriveTicks - (leftDrive.getPosition()+rightDrive.getPosition())/2.0;
 				rightError = desiredRightDriveTicks - rightDrive.getPosition();
 				//Integral component, sums up the errors to account for smaller values of error that cannot be rectified
