@@ -19,4 +19,5 @@ Our team had a great time utilizing PROS to program the robot this year. Being a
   - An advanced control algorithm used for accurate, autonomous motion
   - Causes the motor to gradually slow down as it gets closer to its target position, prevent overshoot and ensuring accuracy
   - Primarily used on the chassis to accurately move during the autonomous period
+  
 *The src folder contains all the main programming files*
