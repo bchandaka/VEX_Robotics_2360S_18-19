@@ -1,6 +1,7 @@
 # VEX_2360S_18-19
 Our team had a great time utilizing PROS to program the robot this year. Being able to use the full functionality of C++ allowed us to explore various algorithms for autonomous control and even create a custom motor class for easier debugging and greater control.
-
+### The Robot
+![Image of The Robot](https://github.com/bchandaka/VEX_Robotics_2360S_18-19/blob/master/Robot_18-19.JPG)
 ### Programming Features
   *The code has been nearly fully commented, but here is an overview of some unique features in our code*
 - **smartMotor class**
